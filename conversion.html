@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>请求体格式转换</title>
+  <script type="text/javascript" src="./ObjTree.js"></script>
+</head>
+
+<body>
+<div style="text-align: center">
+  <h1>请求体格式转换</h1>
+  <section>
+    <h3>form<->json</h3>
+    <div class="flex">
+      <div style="width: 40%">
+        <textarea class="textarea"></textarea>
+      </div>
+      <div style="width: 20%">
+        <button class="button" onclick="form_to_json()">form->json</button>
+        <br>
+        <button class="button" onclick="json_to_form()">form<-json</button>
+      </div>
+      <div style="width: 40%">
+        <textarea class="textarea"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section style="margin-top: 5%">
+    <h3>xml<->json</h3>
+    <div class="flex">
+      <div style="width: 40%">
+        <textarea class="textarea"></textarea>
+      </div>
+      <div style="width: 20%">
+        <button class="button" onclick="xml_to_json()">xml->json</button>
+        <br>
+        <button class="button" onclick="json_to_xml()">xml<-json</button>
+      </div>
+      <div style="width: 40%">
+        <textarea class="textarea"></textarea>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  function form_to_json(source) {
+    source = document.querySelectorAll('.textarea')[0].value || source;
+    if (source) {
+      let json_obj;
+      if (typeof source === "object") {
+        json_obj = JSON.stringify(source);
+      } else if (typeof source === "string") {
+        json_obj = JSON.stringify(JSON.parse(source))
+      } else {
+
+      }
+      document.querySelectorAll('.textarea')[1].value = json_obj;
+    } else {
+
+    }
+  }
+
+  function json_to_form(source) {
+    source = document.querySelectorAll('.textarea')[1].value || source;
+    if (source) {
+      let form_obj;
+      if (typeof source === "object") {
+        form_obj = JSON.parse(JSON.stringify(source));
+      } else if (typeof source === "string") {
+        form_obj = JSON.parse(source.slice(1, source.length - 1));
+      } else {
+
+      }
+      document.querySelectorAll('.textarea')[0].value = JSON.stringify(form_obj);
+    } else {
+
+    }
+  }
+
+  var objTree = new XML.ObjTree();
+
+  function xml_to_json(source) {
+    source = document.querySelectorAll('.textarea')[2].value || source;
+    if (source) {
+      let json_obj;
+      json_obj = JSON.stringify(objTree.parseXML(source));
+      document.querySelectorAll('.textarea')[3].value = json_obj;
+    } else {
+
+    }
+  }
+
+  function json_to_xml(source) {
+    source = document.querySelectorAll('.textarea')[3].value || source;
+    if (source) {
+      let xml_content;
+      if (typeof source === "object") {
+        xml_content = objTree.writeXML(source);
+      } else if (typeof source === "string") {
+        xml_content = objTree.writeXML(JSON.parse(source.slice(1, source.length - 1)));
+      } else {
+
+      }
+      document.querySelectorAll('.textarea')[2].value = xml_content;
+    } else {
+
+    }
+  }
+
+  //测试用例
+  // var form = {
+  //   "hierarchicalLevelText": "按三级渠道",
+  //   "hierarchicalLevel": "4",
+  //   "hierarchicalIdText": [
+  //     "所有三级渠道"
+  //   ],
+  //   "hierarchicalId": [
+  //     "16888"
+  //   ],
+  //   "userId": 1348002389
+  // };
+  // var json = '{ "name":"Runoob", "initDate":"2013-12-14", "site":"www.runoob.com"}';
+  // var xml = `
+  // <alexa ver="0.9" url="http://coursesweb.net/" home="0" aid="=">
+  //     <sd title="a" host="coursesweb.net">
+  //         <title>CoursesWeb: php, mysql, html, css, javascript, ajax, jquery, actionscript, flash</title>
+  //         <linksin num="1102"/>
+  //         <speed pct="51">4578</speed>
+  //     </sd>
+  //     <sd>
+  //         <popularity>5777</popularity>
+  //         <reach rank="5952"/>
+  //         <rank url="http://coursesweb.net/">6667</rank>
+  //     </sd>
+  // </alexa>`;
+</script>
+</body>
+<style>
+  .flex {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .button {
+    margin: 15% 0 20% 0;
+  }
+
+  .textarea {
+    height: 120%;
+    width: 100%;
+  }
+</style>
+
+</html>
